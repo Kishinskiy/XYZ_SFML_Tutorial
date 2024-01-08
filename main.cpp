@@ -1,10 +1,11 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 const float INITITAL_SPEED = 100.f;
 const float PLAYER_SIZE = 20.f;
-const float ACCELERATION = 20.f;
+const float ACCELERATION = 100.f;
 const int NUM_APPLES = 20;
 const float APPLE_SIZE = 20.f;
 
@@ -93,8 +94,6 @@ void playerMovement()
     deltaTime = currentTime - lastTime;
     lastTime = currentTime;
 
-    playerSpeed += ACCELERATION * deltaTime;
-
     // Player Movement
     if (playerDirection == 0)
     {
@@ -166,13 +165,6 @@ int main()
                 sf::sleep(wait);
                 isRunning = false;
                 break;
-
-
-
-
-
-
-
             }
 
 
@@ -199,6 +191,9 @@ int main()
                         ++numEatenApples;
 
                         addAppleShape(i);
+                        playerSpeed += ACCELERATION;
+
+                    
 
                     }
                 }
