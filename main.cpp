@@ -9,17 +9,29 @@ const float ACCELERATION = 20.f;
 const int NUM_APPLES = 20;
 const float APPLE_SIZE = 20.f;
 
+struct Vector2D
+{
+    float x = 0;
+    float y = 0;
+};
 
+enum class PlayerDirection {
+    Right = 0,
+    Up,
+    Left,
+    Down
+};
+
+typedef Vector2D Position2D;
+
+Position2D playerPosition = {SCREEN_WIDTH / 2.f, SCREEN_HEIGHT / 2.f };
 // Player Start Position
-static float playerX = SCREEN_WIDTH / 2.f;
-static float playerY = SCREEN_HEIGHT / 2.f;
 static float playerSpeed = INITITAL_SPEED;
-static int playerDirection = 0; //0 -right, 1 - up, 2 - left, 3 - down
+PlayerDirection playerDirection = PlayerDirection::Right;
 static sf::RectangleShape playerShape;
 
 // Init Apples
-static float appleX[NUM_APPLES];
-static float appleY[NUM_APPLES];
+Position2D applePosition[NUM_APPLES];
 static bool isApppleEaten[NUM_APPLES];
 static sf::CircleShape appleShape[NUM_APPLES];
 
@@ -33,27 +45,27 @@ float deltaTime = currentTime - lastTime;
 
 void createPlayer()
 {
-    playerX = SCREEN_WIDTH / 2.f;
-    playerY = SCREEN_HEIGHT / 2.f;
+    playerPosition.x = SCREEN_WIDTH / 2.f;
+    playerPosition.y = SCREEN_HEIGHT / 2.f;
     playerSpeed = INITITAL_SPEED;
 
     // Player
     playerShape.setSize(sf::Vector2f(PLAYER_SIZE, PLAYER_SIZE));
     playerShape.setFillColor(sf::Color::Red);
     playerShape.setOrigin(PLAYER_SIZE / 2.f, PLAYER_SIZE / 2.f);
-    playerShape.setPosition(playerX, playerY);
+    playerShape.setPosition(playerPosition.x, playerPosition.y);
 }
 
 void addAppleShape(int i)
 {
     isApppleEaten[i] = false;
-    appleX[i] = rand() / (float)RAND_MAX * SCREEN_WIDTH;
-    appleY[i] = rand() / (float)RAND_MAX * SCREEN_HEIGHT;
+    applePosition[i].x = rand() / (float)RAND_MAX * SCREEN_WIDTH;
+    applePosition[i].y = rand() / (float)RAND_MAX * SCREEN_HEIGHT;
 
     appleShape[i].setRadius(APPLE_SIZE / 2.f);
     appleShape[i].setFillColor(sf::Color::Green);
     appleShape[i].setOrigin(APPLE_SIZE / 2.f, APPLE_SIZE / 2.f);
-    appleShape[i].setPosition(appleX[i], appleY[i]);
+    appleShape[i].setPosition(applePosition[i].x, applePosition[i].y);
 }
 
 void createApples()
@@ -70,19 +82,19 @@ void keyBinding()
     // KeyBinding
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
-        playerDirection = 0;
+        playerDirection = PlayerDirection::Right;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
-        playerDirection = 1;
+        playerDirection = PlayerDirection::Up;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
-        playerDirection = 2;
+        playerDirection = PlayerDirection::Left;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     {
-        playerDirection = 3;
+        playerDirection = PlayerDirection::Down;
     }
 }
 
@@ -94,22 +106,28 @@ void playerMovement()
     deltaTime = currentTime - lastTime;
     lastTime = currentTime;
 
-    // Player Movement
-    if (playerDirection == 0)
+    switch (playerDirection)
     {
-        playerX += playerSpeed * deltaTime;
+    case PlayerDirection::Right:
+    {
+        playerPosition.x += playerSpeed * deltaTime;
+        break;
     }
-    else if (playerDirection == 1)
+    case PlayerDirection::Up:
     {
-        playerY -= playerSpeed * deltaTime;
+        playerPosition.y -= playerSpeed * deltaTime;
+        break;
     }
-    else if (playerDirection == 2)
+    case PlayerDirection::Left:
     {
-        playerX -= playerSpeed * deltaTime;
+        playerPosition.x -= playerSpeed * deltaTime;
+        break;
     }
-    else if (playerDirection == 3)
+    case PlayerDirection::Down:
     {
-        playerY += playerSpeed * deltaTime;
+        playerPosition.y += playerSpeed * deltaTime;
+        break;
+    }
     }
 }
 
@@ -156,8 +174,8 @@ int main()
 
 
             // Border Collision
-            if (playerX - PLAYER_SIZE / 2.f < 0.f || playerX + PLAYER_SIZE / 2.f > SCREEN_WIDTH ||
-                playerY - PLAYER_SIZE / 2.f < 0.f || playerY + PLAYER_SIZE / 2.f > SCREEN_HEIGHT)
+            if (playerPosition.x - PLAYER_SIZE / 2.f < 0.f || playerPosition.x + PLAYER_SIZE / 2.f > SCREEN_WIDTH ||
+                playerPosition.y - PLAYER_SIZE / 2.f < 0.f || playerPosition.y + PLAYER_SIZE / 2.f > SCREEN_HEIGHT)
             {
 
                 sf::Time wait = sf::milliseconds(900);
@@ -173,8 +191,8 @@ int main()
                 if (!isApppleEaten[i])
                 {
                     /*
-                    float dx = fabs(playerX - appleX[i]);
-                    float dy = fabs(playerY - appleY[i]);
+                    float dx = fabs(playerPosition.x - applePosition[i].x[i]);
+                    float dy = fabs(playerPosition.y - applePosition[i].y[i]);
                     if (dx <= (APPLE_SIZE + PLAYER_SIZE) / 2.f &&
                         dy <= APPLE_SIZE + PLAYER_SIZE / 2.f)
                     {
@@ -182,8 +200,8 @@ int main()
                         ++numEatenApples;
                     }
                     */
-                    float squareDistance = (playerX - appleX[i]) * (playerX - appleX[i]) +
-                        (playerY - appleY[i]) * (playerY - appleY[i]);
+                    float squareDistance = (playerPosition.x - applePosition[i].x) * (playerPosition.x - applePosition[i].x) +
+                        (playerPosition.y - applePosition[i].y) * (playerPosition.y - applePosition[i].y);
                     float squareRadiusSum = (APPLE_SIZE + PLAYER_SIZE) * (APPLE_SIZE + PLAYER_SIZE) / 4;
                     if (squareDistance <= squareRadiusSum)
                     {
@@ -200,7 +218,7 @@ int main()
             }
 
             window.clear();
-            playerShape.setPosition(playerX, playerY);
+            playerShape.setPosition(playerPosition.x, playerPosition.y);
             for (int i = 0; i < NUM_APPLES; ++i)
             {
                 if (!isApppleEaten[i])
