@@ -3,8 +3,12 @@
 #include "Constants.h"
 #include "Game.h"
 
+
+
 int main()
 {
+    using namespace AppleGames;
+
     int seed = (int)time(nullptr);
     srand(seed);
     // Init window
