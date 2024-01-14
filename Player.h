@@ -18,9 +18,12 @@ namespace AppleGames
         Position2D position;
         float speed = INITIAL_SPEED;
         PlayerDirection direction = PlayerDirection::Right;
-        sf::RectangleShape shape;
+        sf::Sprite sprite;
     };
 
-    void InitPlayer(Player& player);
+    struct Game;
+
+    void InitPlayer(Player& player, const Game& game);
+    void DrawPlayer(Player& player, sf::RenderWindow& window);
 }
 

@@ -5,7 +5,7 @@ namespace AppleGames
 {
     void RestartGame(Game& game)
     {
-        InitPlayer(game.player);
+        InitPlayer(game.player, game);
 
         // Init apples
         for (int i = 0; i < NUM_APPLES; ++i)
@@ -133,8 +133,7 @@ namespace AppleGames
     void DrawGame(Game& game, sf::RenderWindow& window)
     {
         window.draw(game.background);
-        game.player.shape.setPosition(game.player.position.x, game.player.position.y);
-        window.draw(game.player.shape);
+        DrawPlayer(game.player, window);
         for (int i = 0; i < NUM_APPLES; ++i)
         {
             game.apples[i].shape.setPosition(game.apples[i].position.x, game.apples[i].position.y);
