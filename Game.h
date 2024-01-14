@@ -19,6 +19,9 @@ namespace AppleGames
         bool isGameFinished = false;
         float timeSinceGameFinish = 0.f;
         sf::RectangleShape background;
+
+        // Rresources
+        sf::Texture playerTexture;
     };
 
     void RestartGame(Game& game);
