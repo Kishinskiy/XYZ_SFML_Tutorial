@@ -1,5 +1,10 @@
 #pragma once
 
+
+namespace sf
+{
+    class Sprite;
+}
 namespace AppleGames
 {
     struct Vector2D
@@ -17,6 +22,8 @@ namespace AppleGames
 
     bool IsCirclesCollide(Position2D circle1Position, float circle1Radius,
         Position2D circle2Position, float circle2Radius);
+
+    void SetSpriteSize(sf::Sprite& sprite, float desiredWidth, float desiredHeight);
 }
 
 

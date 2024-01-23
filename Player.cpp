@@ -12,6 +12,7 @@ namespace AppleGames
 
         // Init Player Texture
         player.sprite.setTexture(game.playerTexture);
+        SetSpriteSize(player.sprite, PLAYER_SIZE, PLAYER_SIZE);
     }
 
     void DrawPlayer(Player& player, sf::RenderWindow& window)

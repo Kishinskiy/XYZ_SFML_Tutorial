@@ -1,5 +1,6 @@
 #include "Math.h"
 #include <cstdlib>
+#include <SFML/Graphics.hpp>
 
 namespace AppleGames
 {
@@ -26,6 +27,14 @@ namespace AppleGames
             (circle1Position.y - circle2Position.y) * (circle1Position.y - circle2Position.y);
         float squareRadiusSum = (circle1Radius + circle2Radius) * (circle1Radius + circle2Radius);
         return squareDistance <= squareRadiusSum;
+    }
+
+    void SetSpriteSize(sf::Sprite& sprite, float desiredWidth, float desiredHeight)
+    {
+       sf::FloatRect spriteRect = sprite.getLocalBounds();
+
+       sf::Vector2f scale = { desiredWidth / spriteRect.width, desiredHeight / spriteRect.height };
+       sprite.setScale(scale);
     }
 
 }
