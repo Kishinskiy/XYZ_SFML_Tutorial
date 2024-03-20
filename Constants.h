@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-namespace AppleGames
+namespace ApplesGame
 {
 	const std::string RESOURCES_PATH = "Resources/";
 	const int SCREEN_WIDTH = 800;
